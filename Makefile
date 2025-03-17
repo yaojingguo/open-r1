@@ -5,14 +5,15 @@ export PYTHONPATH = src
 
 check_dirs := src tests
 
+pip_options := --index-url http://mirrors.cloud.aliyuncs.com/pypi/simple/  --trusted-host mirrors.cloud.aliyuncs.com
 
 # dev dependencies
 install:
-	uv venv openr1 --python 3.11 && . openr1/bin/activate && uv pip install --upgrade pip
-	uv pip install vllm==0.7.2
-	uv pip install setuptools
-	uv pip install flash-attn --no-build-isolation
-	GIT_LFS_SKIP_SMUDGE=1 uv pip install -e ".[dev]"
+	uv venv openr1 --python 3.11 && . openr1/bin/activate && uv pip install --upgrade pip $(pip_options)
+	uv pip install vllm==0.7.2 $(pip_options)
+	uv pip install setuptools $(pip_options)
+	uv pip install flash-attn --no-build-isolation $(pip_options)
+	GIT_LFS_SKIP_SMUDGE=1 uv pip install -e ".[dev]" $(pip_options)
 
 style:
 	ruff format --line-length 119 --target-version py310 $(check_dirs) setup.py
